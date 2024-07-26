@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <style>
+        body {
+            margin: 5rem;
+        }
+    </style>
+    <title>Le jeu du pendu</title>
+</head>
+
+<body>
+<div id="app">
+
+    <!--1) ---- EMPTY USER ? -------->
+
+    <div v-if="!isUserREgistered">
+        <h1>Bienvenue au jeu du Pendu</h1><br>
+        <p>Qui es-tu? --->>
+            <input v-model="username">
+        </p>
+        <button @click="connexionUser">Se connecter</button>
+    </div>
+
+    <!--2) ------ IDENTIFICATION OK ? ------>
+
+    <div v-else-if="!isGameActive">
+        <h1>Bienvenue à toi * {{ username }} * </h1><br>
+        <button @click="startGame">Jouer</button>
+    </div>
+
+    <!---3) ----- GAME STARTING --------> <!-- isGameActive : true -->
+
+    <div v-else>
+        <h1>Bienvenue au jeu du Pendu</h1><br>
+        <div>Mot : {{ wordToFind}}</div>
+
+        <div class="imgHangman">
+            <span v-for="(erreur, indice) in cptErrorMin" :key="indice">&#129698;</span>
+        </div>
+
+        <!------A) ---------- WINNER OR LOOSER ? ---------------->
+        <div v-if="gameOver">
+            <h2>Vous avez perdu ! Le mot était : {{ wordToFind }}</h2>
+            <button @click="startGame">Rejouer</button>
+        </div>
+
+        <div v-else-if="recomposedWord === wordToFind">
+            <h2>Félicitations {{ username }}, vous avez gagné ! </h2>
+            <button @click="startGame">Rejouer</button>
+        </div>
+
+        <!--------B) ------------FIND TO WORD--------------------->
+        <div v-else>
+            <div><!-- 1/2  =>Affichage du mot à deviner -->
+                <span v-for="letter in recomposedWord" :key="letter"></span>
+            </div>
+
+            <div>
+                <button
+                        v-for="letter in alphabet"
+                        :key="letter"
+                        @click="selectedLetter(letter); checkSelectedLetter()"
+                        :class="['letter-button', { used:goodLetters.includes(letter.toLowerCase() || badLetters.toLowerCase())}]"
+                        :disabled="goodLetters.includes(letter.toLowerCase()) || badLetters.includes(letter.toLowerCase())">
+                    {{ letter }}
+                </button>
+            </div>
+        </div><!-- end else-->
+
+        <!---END--->
+    </div> <!--end n°3-->
+</div> <!-- end app -->
+
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+        crossorigin="anonymous"></script>
+<script src="js/pendu.js"></script>
+</body>
+</html>
