@@ -1,11 +1,10 @@
 const app = Vue.createApp({
-
     data() {
         return {
             /* -- OBJECT PROPERTY -- */
 
             /* -- ETAPE 1 -- */
-            isUserREgistered: false, /* le user a t'il indiqué son nom */
+            isUserRegistered: false, /* le user a t'il indiqué son nom */
             username: "",
 
             /* -- ETAPE 2 -- */
@@ -15,7 +14,13 @@ const app = Vue.createApp({
             alphabet: "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split(''),
 
             wordToFind: "",
-            arrayWord: ['coucou', 'salut', 'hello'],
+            categoryNow: "",
+
+            arrayWord: {
+                'ANIMAUX': ['chat', 'chien', 'elephant', 'girafe', 'lion', 'tigre', 'souris', 'cheval', 'mouton', 'requin'],
+                'PAYS': ['france', 'allemagne', 'italie', 'espagne', 'belgique', 'portugal', 'canada', 'bresil', 'japon', 'australie'],
+                'FRUITS': ['pomme', 'banane', 'cerise', 'fraise', 'orange', 'citron', 'kiwi', 'raisin', 'mangue', 'ananas']
+            },
 
             cptErrorMin: 0,
             cptErrorMax: 6,
@@ -32,12 +37,18 @@ const app = Vue.createApp({
         /* -- Les méthodes sont appelées LORS D'UNE ACTION, d'un évènt = @click / hover / ... -- */
         connexionUser() {
             if (this.username === "") return;
-            this.isUserREgistered = true;
+            this.isUserRegistered = true;
         },
 
         startGame() {
             this.isGameActive = true;
-            this.wordToFind = this.arrayWord[Math.floor(Math.random() * this.arrayWord.length)];
+
+            const categories = Object.keys(this.arrayWord);
+            this.categoryNow = categories[Math.floor(Math.random() * categories.length)];
+
+            const words = this.arrayWord[this.categoryNow];
+            this.wordToFind = words[Math.floor(Math.random() * words.length)];
+
             this.goodLetters = [];
             this.badLetters = [];
             this.cptErrorMin = 0;
@@ -46,6 +57,7 @@ const app = Vue.createApp({
 
         selectedLetter(letter) {
             this.selectLetter = letter.toLowerCase();
+            this.checkSelectedLetter();
         },
 
         checkSelectedLetter() {
@@ -62,25 +74,23 @@ const app = Vue.createApp({
         },
 
         checkGamesOver() {
-
+            if (this.cptErrorMin >= this.cptErrorMax) {
+                this.gameOver = true;
+            }
         },
     },
-
 
     computed: {
         /* -- Fonctionne comme une variable dynamique pour alléger le processur (serveur) -- */
         recomposedWord() {
             return this.wordToFind
                 .split('')
-                .map(letter => (this.goodLetters.includes(letter) ? letter : '*'))
+                .map(letter => (this.goodLetters.includes(letter) ? letter : ' _ '))
                 .join('');
         }
     },
 
-
     mounted() {
         /* -- Lors du premier chargement, il va exécuter comme une méthode sans action, sans évents, ... -- */
     }
-
-
-}).mount('#app')
+}).mount('#app');

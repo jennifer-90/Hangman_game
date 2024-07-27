@@ -5,14 +5,22 @@
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <style>
-        body {
-            margin: 5rem;
-        }
-    </style>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Barriecito&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Amatic+SC:wght@400;700&family=Barriecito&display=swap"
+          rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Amatic+SC:wght@400;700&family=Barriecito&family=Josefin+Sans:ital,wght@0,100..700;1,100..700&display=swap"
+          rel="stylesheet">
+
+    <link rel="stylesheet" href="css/style.css">
+
     <title>Le jeu du pendu</title>
 </head>
 
@@ -21,12 +29,12 @@
 
     <!--1) ---- EMPTY USER ? -------->
 
-    <div v-if="!isUserREgistered">
-        <h1>Bienvenue au jeu du Pendu</h1><br>
-        <p>Qui es-tu? --->>
+    <div v-if="!isUserRegistered">
+        <h1>- Bienvenue au jeu du Pendu -</h1><br>
+        <div>Qui es-tu? --->>
             <input v-model="username">
-        </p>
-        <button @click="connexionUser">Se connecter</button>
+            <button @click="connexionUser">Se connecter</button>
+        </div>
     </div>
 
     <!--2) ------ IDENTIFICATION OK ? ------>
@@ -39,8 +47,13 @@
     <!---3) ----- GAME STARTING --------> <!-- isGameActive : true -->
 
     <div v-else>
-        <h1>Bienvenue au jeu du Pendu</h1><br>
-        <div>Mot : {{ wordToFind}}</div>
+        <h1>- Bienvenue au jeu du Pendu -</h1>
+        <div>&#128100; {{ username }}</div>
+        <br>
+        <div class="category"> {{ categoryNow }}</div>
+        <br>
+        <div>Mot à chercher : <br> >> {{ recomposedWord }} <<</div>
+        <br><br>
 
         <div class="imgHangman">
             <span v-for="(erreur, indice) in cptErrorMin" :key="indice">&#129698;</span>
@@ -48,12 +61,12 @@
 
         <!------A) ---------- WINNER OR LOOSER ? ---------------->
         <div v-if="gameOver">
-            <h2>Vous avez perdu ! Le mot était : {{ wordToFind }}</h2>
+            <h2>Vous avez perdu ! Le mot était : {{ wordToFind }} </h2>
             <button @click="startGame">Rejouer</button>
         </div>
 
         <div v-else-if="recomposedWord === wordToFind">
-            <h2>Félicitations {{ username }}, vous avez gagné ! </h2>
+            <h2>Félicitations {{ username }}, vous avez gagné ! &#127881;</h2>
             <button @click="startGame">Rejouer</button>
         </div>
 
@@ -74,6 +87,11 @@
                 </button>
             </div>
         </div><!-- end else-->
+        <div v-if="!gameOver && recomposedWord !== wordToFind">
+            <br>
+            <button @click="startGame">Changer de mot</button>
+        </div>
+
 
         <!---END--->
     </div> <!--end n°3-->

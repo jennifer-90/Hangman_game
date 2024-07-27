@@ -1,0 +1,32 @@
+
+body {
+  margin: 5rem;
+  text-align: center;
+  font-family: "Josefin Sans", sans-serif;
+}
+
+h1, h2 {
+  font-family: "Amatic SC", sans-serif;
+  font-size: 4rem;
+}
+
+
+.letter-button {
+  font-family: "Barriecito", system-ui;
+  font-size: 2rem;
+  margin: 0.4rem;
+  padding: 0.4rem;
+  transition: background-color 0.2s;
+
+  &:hover {
+    background-color: darken(#b1afaf, 10%);
+  }
+}
+
+.category {
+  border-style: solid;
+  padding: 0.5rem;
+  margin: auto;
+  width: 20rem;
+  color: hotpink;
+}
